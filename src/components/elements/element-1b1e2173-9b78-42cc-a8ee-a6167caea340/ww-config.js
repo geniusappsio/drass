@@ -27,6 +27,7 @@ export default {
             options: {
                 nullable: true,
             },
+            hidden: (_content, _sidePanelContent, _boundProps, wwProps) => !!(wwProps && wwProps.color),
         },
     },
 };

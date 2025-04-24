@@ -8,7 +8,7 @@ import element_59dca300_db78_42e4_a7a6_0cbf22d3cc82 from '@/components/elements/
 import element_9ecb2cfc_cef7_4be8_b736_3e17a3b7e9ff from '@/components/elements/element-9ecb2cfc-cef7-4be8-b736-3e17a3b7e9ff/src/wwElement.vue';
 import element_b783dc65_d528_4f74_8c14_e27c934c39b1 from '@/components/elements/element-b783dc65-d528-4f74-8c14-e27c934c39b1/src/wwElement.vue';
 import element_d7904e9d_fc9a_4d80_9e32_728e097879ad from '@/components/elements/element-d7904e9d-fc9a-4d80-9e32-728e097879ad/src/wwElement.vue';
-import element_deb10a01_5eef_4aa1_9017_1b51c2ad6fd0 from '@/components/elements/element-deb10a01-5eef-4aa1-9017-1b51c2ad6fd0/./src/wwElement_InputBasic.vue';
+import element_deb10a01_5eef_4aa1_9017_1b51c2ad6fd0 from '@/components/elements/element-deb10a01-5eef-4aa1-9017-1b51c2ad6fd0/src/wwElement.vue';
 
 // eslint-disable-next-line no-undef
 app.component('wwobject-1b1e2173-9b78-42cc-a8ee-a6167caea340', element_1b1e2173_9b78_42cc_a8ee_a6167caea340);
