@@ -24,6 +24,7 @@ import { useComponentData, useComponentTriggerEvent, useLibraryComponentWorkflow
 import { useInner } from '@/_front/use/useInner.js';
 import { useComponentStates } from '@/_front/use/useComponentStates.js';
 import { useLibraryComponentActions } from '@/_common/use/useActions.js';
+import { usePopupStore } from '@/pinia/popup';
 
 let componentId = 1;
 
@@ -34,6 +35,7 @@ export default {
     inheritAttrs: false,
     props: {
         uid: { type: String, required: true },
+        isPopup: { type: Boolean, default: false },
     },
     setup(props) {
         const id = componentId;
@@ -46,6 +48,8 @@ export default {
         const containerType = inject('__wwContainerType', null);
 
         provide('wwLibraryComponentUid_', props.uid);
+
+        const modalsStore = usePopupStore();
 
  
         const elementComponent = ref(null);
@@ -175,6 +179,12 @@ export default {
         provide('_wwLibraryComponentContext', libraryComponentContext);
 
  
+        if (props.isPopup) {
+            onBeforeUnmount(() => {
+                triggerLibraryComponentEvent('_wwClosePopup');
+            });
+        }
+
         return {
             addInternalState,
             removeInternalState,
@@ -187,6 +197,7 @@ export default {
                 rawState,
                 rawStyle,
              }),
+            modalsStore,
             elementComponent,
          };
     },

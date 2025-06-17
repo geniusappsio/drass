@@ -24,14 +24,17 @@
                 :section-id="activeLinkPopup.sectionId"
             />
         </transition>
+        <wwFrontPopup v-for="(modal, uid) in modalsStore.instances" :key="uid" :modal="modal" />
     </div>
 </template>
 
 <script>
 import { computed, ref } from 'vue';
 import { mapGetters, useStore } from 'vuex';
-import wwPageLoadProgress from '@/_front/components/wwPageLoadProgress';
-import { getBackgroundStyle } from '@/_front/helpers/wwBackgroungStyle';
+import wwPageLoadProgress from '@/_front/components/wwPageLoadProgress.vue';
+import { getBackgroundStyle } from '@/_front/helpers/wwBackgroungStyle.js';
+import { usePopupStore } from '@/pinia/popup.js';
+import wwFrontPopup from '@/_front/components/wwFrontPopup.vue';
 
 /* wwFront:start */
 import { useHead } from '@vueuse/head';
@@ -41,10 +44,12 @@ import { useHead } from '@vueuse/head';
 export default {
     components: {
         wwPageLoadProgress,
+        wwFrontPopup,
      },
     setup() {
         const store = useStore();
         const page = computed(() => store.getters['websiteData/getPage'] || { id: null, meta: {} });
+        const modalsStore = usePopupStore();
 
         const designInfo = computed(() => store.getters['websiteData/getDesignInfo'] || {});
 
@@ -65,6 +70,7 @@ export default {
                 x: 0,
                 y: 0,
             },
+            modalsStore,
             /* wwFront:start */
             sections: computed(() => {
                 const sections = store.getters['websiteData/getSections'];

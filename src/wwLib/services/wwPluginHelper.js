@@ -48,7 +48,7 @@ export default {
             },
             get settings() {
                 const pluginFound = wwLib.$store.getters['websiteData/getPluginByName'](plugin.namespace) || {};
-                return _.cloneDeep(
+                return cloneDeep(
                     wwLib.$store.getters['websiteData/getPluginSettings'](pluginFound.id) || {
                         publicData: {},
                         privateData: {},

@@ -77,7 +77,7 @@ export default {
 
         const addInternalState = inject('wwAddInternalState', () => {});
         const removeInternalState = inject('wwRemoveInternalState', () => {});
-        const sectionId = inject('sectionId');
+        const sectionId = inject('sectionId', null);
         const bindingContext = inject('bindingContext', null);
         /* wwFront:start */
         const route = useRoute();

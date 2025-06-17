@@ -236,7 +236,6 @@ export default {
         // The function is call in different places in the setup functions
         const config = getComponentConfiguration('element', props.uid);
 
- 
         return {
             component,
             content,

@@ -7,6 +7,7 @@ import { getValue } from '@/_common/helpers/code/customCode.js';
 import { executeWorkflow } from '@/_common/helpers/code/workflows.js';
 import { getComponentRawProperty } from '@/_common/helpers/component/componentProperty.js';
 import { lazySet } from '@/_common/helpers/reactivity.js';
+import { usePopupStore } from '@/pinia/popup';
 
 export function useComponentData({
     type,
@@ -30,13 +31,19 @@ export function useComponentData({
     let rawState = {};
     let state = {};
 
+    const popupsStore = usePopupStore();
+
  
     const configuration = getComponentConfiguration(type, uid);
-    const component = computed(() =>
-        type === 'section'
-            ? wwLib.$store.getters['websiteData/getSections'][uid]
-            : wwLib.$store.getters['websiteData/getWwObjects'][uid]
-    );
+    const component = computed(() => {
+        if (type === 'section') {
+            return wwLib.$store.getters['websiteData/getSections'][uid];
+        } else if (uid.startsWith('popup-')) {
+            return popupsStore.instances[uid];
+        } else {
+            return wwLib.$store.getters['websiteData/getWwObjects'][uid];
+        }
+    });
     const layers = inject('_wwLibraryComponentLayers', {});
 
     for (let propertyName in configuration.properties) {
@@ -86,7 +93,7 @@ export function useComponentData({
     }
     for (const propertyName in STATE_CONFIGURATION) {
         if (propertyName === 'interactions') {
-            const rawProperty = computed(() => component.value?._state.interactions);
+            const rawProperty = computed(() => component.value?._state?.interactions);
             // eslint-disable-next-line vue/no-ref-as-operand
             state.interactions = rawProperty;
             // eslint-disable-next-line vue/no-ref-as-operand

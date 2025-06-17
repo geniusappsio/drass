@@ -1,4 +1,5 @@
 import { useComponentBasesStore } from '@/pinia/componentBases';
+import { usePopupStore } from '@/pinia/popup';
 
 export function getComponentVueComponentName(type, uid, noLog = false) {
     const baseUid = getComponentBaseUid(type, uid, noLog);
@@ -16,7 +17,10 @@ export function getComponentBaseVueComponentName(type, baseUid) {
 }
 
 export function getComponentBaseUid(type, uid, noLog = false) {
-    if (type === 'element') {
+    if (uid?.startsWith('popup-')) {
+        const modalStore = usePopupStore(wwLib.$pinia);
+        return modalStore.instances[uid]?.libraryComponentBaseId;
+    } else if (type === 'element') {
         return wwLib.$store.getters['websiteData/getWwObjects'][uid]?.wwObjectBaseId;
     } else if (type === 'libraryComponent') {
         return wwLib.$store.getters['websiteData/getWwObjects'][uid]?.libraryComponentBaseId;
@@ -181,7 +185,9 @@ export function getPageElementsIds() {
 
 export function getComponentName(type, uid) {
     if (!type) return '';
-    if (type === 'section') {
+    if (uid?.startsWith('popup-')) {
+        return null;
+    } else if (type === 'section') {
         const { sectionTitle } = wwLib.$store.getters['websiteData/getSections'][uid] || {};
         return sectionTitle;
     } else {
@@ -190,6 +196,9 @@ export function getComponentName(type, uid) {
     }
 }
 export function setComponentName(type, uid, value) {
+    if (uid?.startsWith('popup-')) {
+        return;
+    }
     wwLib.$store.dispatch('websiteData/setComponentProperty', {
         type,
         uid,

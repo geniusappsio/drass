@@ -214,6 +214,7 @@ export default class wwObjectHelper {
                 parent = {
                     ...parentData,
                     parentSectionId: section.uid,
+                    parentLibraryComponentId: section.parentLibraryComponentId,
                     type: 'section',
                 };
             }
@@ -226,6 +227,7 @@ export default class wwObjectHelper {
                 parent = {
                     ...parentData,
                     parentSectionId: element.parentSectionId,
+                    parentLibraryComponentId: element.parentLibraryComponentId,
                     type: 'element',
                 };
             }

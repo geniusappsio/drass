@@ -1,8 +1,7 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, set } from 'lodash';
 import { computed, onUnmounted, reactive, watch, onMounted, inject } from 'vue';
 import { checkVariableType } from '@/_common/helpers/updateVariable.js';
 import { getValue } from '@/_common/helpers/code/customCode.js';
-import { set } from 'lodash';
 import { useVariablesStore } from '@/pinia/variables.js';
 import { escapeHTMLInObject } from '@/_common/helpers/htmlEscaper.js';
 
@@ -57,25 +56,43 @@ export function useInner(baseUid, { context, props }, componentIdentifier) {
         }
     });
 
-    // TODO: strange that it is needed. May broke in production
-    const getValueFn = getValue;
-
     function setFormula(formulaId) {
         formulas[formulaId] = (...args) => {
             const __wwParameters = (formulaConfiguration.value?.[formulaId]?.parameters || []).map(
                 parameter => parameter.name || ''
             );
-            const __wwClosureParameters = ['__wwItem', ...__wwParameters];
+            const __wwClosureParameters = [
+                'getValue',
+                'context',
+                'baseUid',
+                'props',
+                'variables',
+                'formulas',
+                'args',
+                '__wwItem',
+                ...__wwParameters,
+            ];
             // eslint-disable-next-line no-unused-vars
-            const __wwargs = [formulaConfiguration.value?.[formulaId], ...args];
-            return eval(`
-            (function(${__wwClosureParameters.join(', ')}) {
-                return getValueFn(
+            const __wwargs = [
+                getValue,
+                context,
+                baseUid,
+                props,
+                variables,
+                formulas,
+                args,
+                formulaConfiguration.value?.[formulaId],
+                ...args,
+            ];
+
+            return new Function(
+                ...__wwClosureParameters,
+                ` return getValue(
                     {...__wwItem, __wwtype: __wwItem.type},
                     {...context, component: { baseUid, props, variables, formulas }},
                     { recursive: false, args: {names: '${__wwParameters.join(', ')}', value: args } }
-                );
-            })(...__wwargs)`);
+                );`
+            )(...__wwargs);
         };
     }
 

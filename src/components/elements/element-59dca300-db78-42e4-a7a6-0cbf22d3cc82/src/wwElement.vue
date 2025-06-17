@@ -2,7 +2,7 @@
     <component
         :is="tag"
         class="ww-button"
-        :class="{ button: tag, '-link': hasLink && !isEditing }"
+        :class="{ button: tag, '-link': hasLink && !isEditing, active: isActive }"
         :type="buttonType"
         :style="buttonStyle"
         :data-ww-flag="'btn-' + content.buttonType"
@@ -10,6 +10,16 @@
         v-bind="properties"
         @focus="isReallyFocused = true"
         @blur="onBlur($event)"
+        @mousedown="onActivate"
+        @mouseup="onDeactivate"
+        @mouseleave="onDeactivate"
+        @touchstart="onActivate"
+        @touchend="onDeactivate"
+        @touchcancel="onDeactivate"
+        @keydown.enter="onActivate"
+        @keydown.space="onActivate"
+        @keyup.enter="onDeactivate"
+        @keyup.space="onDeactivate"
     >
         <wwElement v-if="content.hasLeftIcon && content.leftIcon" v-bind="content.leftIcon"></wwElement>
         <wwText tag="span" :text="text"></wwText>
@@ -58,6 +68,7 @@ export default {
     data() {
         return {
             isReallyFocused: false,
+            isReallyActive: false,
         };
     },
     computed: {
@@ -99,6 +110,9 @@ export default {
         isFocused() {
             return this.isReallyFocused;
         },
+        isActive() {
+            return this.isReallyActive;
+        },
     },
     watch: {
         'content.disabled': {
@@ -128,10 +142,32 @@ export default {
                 }
             },
         },
+        isActive: {
+            immediate: true,
+            handler(value) {
+                if (value) {
+                    this.$emit('add-state', 'active');
+                } else {
+                    this.$emit('remove-state', 'active');
+                }
+            },
+        },
     },
     methods: {
         onBlur() {
             this.isReallyFocused = false;
+        },
+        onActivate(event) {
+            this.isReallyActive = true;
+            // Emit the original event name
+            const eventName = event.type;
+            this.$emit('trigger-event', { name: eventName });
+        },
+        onDeactivate(event) {
+            this.isReallyActive = false;
+            // Emit the original event name
+            const eventName = event.type;
+            this.$emit('trigger-event', { name: eventName });
         },
     },
 };

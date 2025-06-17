@@ -1,1 +1,1 @@
- require('./common.css');
+ import './common.css';

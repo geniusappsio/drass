@@ -73,8 +73,13 @@ export default {
                 })
             )
             .filter(n => !!n);
+
+        const component = ['div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h5', 'button'].includes(this.tag)
+            ? this.tag
+            : resolveComponent(this.tag);
+
         return h(
-            resolveComponent(this.tag),
+            component,
             {
                 class: {
                     'ww-text-content': true,

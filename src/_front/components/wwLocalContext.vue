@@ -8,7 +8,7 @@ import { provide, computed, inject } from 'vue';
 export default {
     props: {
         data: { type: undefined, default: null },
-        methods: { type: Array, default: () => [] },
+        methods: { type: Object, default: () => {} },
         markdown: { type: String, default: '' },
         elementKey: { type: String, default: 'elementKey' },
     },

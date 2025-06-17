@@ -103,7 +103,7 @@ export default {
     async updatePluginSettings({ commit, getters }, { pluginId, settings }) {
         if (!settings) return;
         const plugin = getters.getPluginById(pluginId);
-        if (plugin && !process.env.VUE_APP_IS_EDITOR_DEV)
+        if (plugin && !import.meta.env.VITE_APP_IS_EDITOR_DEV)
             await window.wwLib.wwPlugin.saveSettings(pluginId, settings.id, settings.publicData, settings.privateData);
         commit('updatePlugin', { pluginId, settings });
     },

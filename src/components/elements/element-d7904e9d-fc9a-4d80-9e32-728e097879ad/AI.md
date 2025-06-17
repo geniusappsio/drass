@@ -11,13 +11,13 @@ keywords:
 
 #### ww-text
 Props:
-- text: object - Text content. An object can be used for multi-language support (e.g., `{ "en": "Hello", "fr": "Bonjour" }`). `text` itself is not bindable but each lang inside are, ex: `"text": { "en": {"wwFormula":...}, "fr": {"wwFormula":...} }`
+- text: object - Text content. An object can be used for multi-language support (e.g., `{ "en": "Hello", "fr": "Bonjour" }`). `text` itself is not bindable but each lang inside are, ex: `"text": { "en": {"js":"return ..."}, "fr": {"js":"return ..."} }`
 - tag: p|h1|h2|h3|h4|button|div - HTML element type
 
 Events: none
 
 Variables: none
 
-Children: none
+Slots: none
 
-Note: For binding the text props, use binding in each language (e.g., `"text": { "en": {"wwFormula":...}, "fr": {"wwFormula":...} }`). Available languages can be found in Page Info variable.
+Note: Available languages can be found in Page Info variable.

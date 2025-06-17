@@ -16,7 +16,7 @@ keywords:
 ***Specifications***:
 -IMPORTANT: The default value for `flexDirection` is `row`
 -Display must be one of: `block`, `flex`, `grid`, `inline-block`, `inline-flex`, `inline-grid`, `none` or binding return one of the values.
--Display must always be in the styles, even when binded : {"uid":"div_1","tag":"ww-div","name":"Div 1 Name","styles":{"default":{ "display": {"wwFormula": "```variables['isDisplayed']```"}, ... }},"children":{"children":[{ ... },{ ... }]}}
+-Display must always be in the styles, even when binded : {"uid":"div_1","tag":"ww-div","name":"Div 1 Name","styles":{"default":{ "display": {"js": "return variables['isDisplayed'];"}, ... }},"slots":{"children":[{ ... },{ ... }]}}
 -For grid column template, you can only use 2 simple formats "repeat(2,1fr)" or "1fr 1fr":
 <gridTemplateColumns_examples>
     <example>
@@ -32,17 +32,13 @@ keywords:
 </gridTemplateColumns_examples>
 -To define a response `gridTemplateColumns`, you must set it in the desired breakpoints:
 <gridTemplateColumns_responsive_examples>
-    {"uid":"div_1","tag":"ww-div","name":"Div 1 Name","styles":{"default":{ "display": "grid", "gridTemplateColumns": "repeat(3, 1fr)", ... }, "tablet": {"gridTemplateColumns": "repeat(2, 1fr)"}, "mobile": {"gridTemplateColumns": "1fr"} },"children":{"children":[{ ... },{ ... }]}}
+    {"uid":"div_1","tag":"ww-div","name":"Div 1 Name","styles":{"default":{ "display": "grid", "gridTemplateColumns": "repeat(3, 1fr)", ... }, "tablet": {"gridTemplateColumns": "repeat(2, 1fr)"}, "mobile": {"gridTemplateColumns": "1fr"} },"slots":{"children":[{ ... },{ ... }]}}
 </gridTemplateColumns_responsive_examples>
 
-***Children***:
+***Slots***:
   - children: Array of elements. Mandatory, must be set event if there are no children.
-  - Ex: {"uid":"div_1","tag":"ww-div","name":"Div 1 Name","styles":{"default":{ "display": "...", ... }},"children":{"children":[{ ... },{ ... }]}}
-  - Do not forget the "children" array in the "children" key.
+  - Ex: {"uid":"div_1","tag":"ww-div","name":"Div 1 Name","styles":{"default":{ "display": "...", ... }},"slots":{"children":[{ ... },{ ... }]}}
 
 ***Events***: none
 
 ***Variables***: none
-
-
-*** CRITICAL *** : YOU MUST ALWAYS SET THE `children` KEY!

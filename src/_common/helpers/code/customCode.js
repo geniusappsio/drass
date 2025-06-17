@@ -1,6 +1,9 @@
 import { isObject } from 'lodash';
 import { computed } from 'vue';
 import { _wwFormulas } from '@/_common/helpers/code/wwFormulas';
+import { workflowFunctions } from '@/_common/helpers/code/workflows';
+
+const AsyncFunction = async function () {}.constructor;
 
 const ERROR_CODES = {
     UNEXPECTED_END_OF_FORMULA: "Unexpected token ';'",
@@ -20,17 +23,17 @@ export const _formulas = computed(() =>
     Object.values(wwLib.$store.getters['data/getFormulas']).reduce((obj, item) => {
         obj[item.name] = obj[item.id] = (...args) => {
             const __wwParameters = (item.parameters || []).map(parameter => parameter.name || '');
-            const __wwClosureParameters = ['__wwItem', ...__wwParameters];
+            const __wwClosureParameters = ['getValue', '__wwItem', 'args', ...__wwParameters];
             // eslint-disable-next-line no-unused-vars
-            const __wwargs = [item, ...args];
-            return eval(`
-            (function(${__wwClosureParameters.join(', ')}) {
-                return getValue(
+            const __wwargs = [getValue, item, args, ...args];
+            return new Function(
+                ...__wwClosureParameters,
+                `return getValue(
                     {...__wwItem, __wwtype: __wwItem.type},
                     {},
                     { recursive: false, args: {names: '${__wwParameters.join(', ')}', value: args } }
-                );
-            })(...__wwargs)`);
+                );`
+            )(...__wwargs);
         };
         return obj;
     }, {})
@@ -48,25 +51,33 @@ export const _pluginFormulas = computed(() => {
 // eslint-disable-next-line no-unused-vars
 export function evaluateCode({ code, filter, sort, __wwmap }, context, event, args) {
  
-    // eslint-disable-next-line no-unused-vars
-    const plugins = wwLib.wwPlugins;
-    // eslint-disable-next-line no-unused-vars
-    const collections = _collections.value;
-    // eslint-disable-next-line no-unused-vars
-    const formulas = _formulas.value;
-    // eslint-disable-next-line no-unused-vars
-    const pluginFormulas = _pluginFormulas.value;
-    // eslint-disable-next-line no-unused-vars
-    const wwFormulas = _wwFormulas;
-    // eslint-disable-next-line no-unused-vars
-    const variables = wwLib.globalVariables.customCodeVariables;
-    // eslint-disable-next-line no-unused-vars
-    const pluginVariables = wwLib.wwPlugins;
-    // eslint-disable-next-line no-unused-vars
-    const globalContext = wwLib.globalContext;
-
     try {
-        const rawValue = eval(`(function (${args?.names || ''}) {${code}\n})(...(args?.value || []))`);
+        const rawValue = new Function(
+            'plugins',
+            'collections',
+            'formulas',
+            'pluginFormulas',
+            'wwFormulas',
+            'variables',
+            'pluginVariables',
+            'globalContext',
+            'context',
+            'event',
+            ...(args?.names || '').split(', '),
+            code
+        )(
+            wwLib.wwPlugins,
+            _collections.value,
+            _formulas.value,
+            _pluginFormulas.value,
+            _wwFormulas,
+            wwLib.globalVariables.customCodeVariables,
+            wwLib.wwPlugins,
+            wwLib.globalContext,
+            context,
+            event,
+            ...(args?.value || [])
+        );
         return mapFilterSortData(rawValue, filter, sort, __wwmap, context, event, args);
     } catch (error) {
         return { error };
@@ -76,25 +87,35 @@ export function evaluateCode({ code, filter, sort, __wwmap }, context, event, ar
 // eslint-disable-next-line no-unused-vars
 export async function executeCode(code, context, event, wwUtils) {
  
-    // eslint-disable-next-line no-unused-vars
-    const plugins = wwLib.wwPlugins;
-    // eslint-disable-next-line no-unused-vars
-    const collections = _collections.value;
-    // eslint-disable-next-line no-unused-vars
-    const formulas = _formulas.value;
-    // eslint-disable-next-line no-unused-vars
-    const pluginFormulas = _pluginFormulas.value;
-    // eslint-disable-next-line no-unused-vars
-    const wwFormulas = _wwFormulas;
-    // eslint-disable-next-line no-unused-vars
-    const variables = wwLib.globalVariables.customCodeVariables;
-    // eslint-disable-next-line no-unused-vars
-    const pluginVariables = wwLib.wwPlugins;
-    // eslint-disable-next-line no-unused-vars
-    const globalContext = wwLib.globalContext;
-
     try {
-        return await eval(`(async function () {${code}\n})()`);
+        return await new AsyncFunction(
+            'plugins',
+            'collections',
+            'formulas',
+            'pluginFormulas',
+            'wwFormulas',
+            'variables',
+            'pluginVariables',
+            'globalContext',
+            'utilsFunctions',
+            'context',
+            'event',
+            'wwUtils',
+            code
+        )(
+            wwLib.wwPlugins,
+            _collections.value,
+            _formulas.value,
+            _pluginFormulas.value,
+            _wwFormulas,
+            wwLib.globalVariables.customCodeVariables,
+            wwLib.wwPlugins,
+            wwLib.globalContext,
+            workflowFunctions,
+            context,
+            event,
+            wwUtils
+        );
     } catch (error) {
         wwLib.wwLog.error(error);
         delete error.stack;
@@ -105,25 +126,33 @@ export async function executeCode(code, context, event, wwUtils) {
 // eslint-disable-next-line no-unused-vars
 export function evaluateFormula({ code, filter, sort, __wwmap }, context, event, args) {
  
-    // eslint-disable-next-line no-unused-vars
-    const plugins = wwLib.wwPlugins;
-    // eslint-disable-next-line no-unused-vars
-    const collections = _collections.value;
-    // eslint-disable-next-line no-unused-vars
-    const formulas = _formulas.value;
-    // eslint-disable-next-line no-unused-vars
-    const pluginFormulas = _pluginFormulas.value;
-    // eslint-disable-next-line no-unused-vars
-    const wwFormulas = _wwFormulas;
-    // eslint-disable-next-line no-unused-vars
-    const variables = wwLib.globalVariables.customCodeVariables;
-    // eslint-disable-next-line no-unused-vars
-    const pluginVariables = wwLib.wwPlugins;
-    // eslint-disable-next-line no-unused-vars
-    const globalContext = wwLib.globalContext;
-
     try {
-        const rawValue = eval(`(function (${args?.names || ''}) {return ${code}\n;})(...(args?.value || []))`);
+        const rawValue = new Function(
+            'plugins',
+            'collections',
+            'formulas',
+            'pluginFormulas',
+            'wwFormulas',
+            'variables',
+            'pluginVariables',
+            'globalContext',
+            'context',
+            'event',
+            ...(args?.names || '').split(', '),
+            `return ${code}\n;`
+        )(
+            wwLib.wwPlugins,
+            _collections.value,
+            _formulas.value,
+            _pluginFormulas.value,
+            _wwFormulas,
+            wwLib.globalVariables.customCodeVariables,
+            wwLib.wwPlugins,
+            wwLib.globalContext,
+            context,
+            event,
+            ...(args?.value || [])
+        );
         return mapFilterSortData(rawValue, filter, sort, __wwmap, context, event, args);
     } catch (error) {
         if (error.message) {
@@ -139,22 +168,22 @@ export function evaluateFormula({ code, filter, sort, __wwmap }, context, event,
 
 export function evaluateGlobalFormula(__wwformula, __wwcontext, parameters) {
     const __wwnames = parameters.map(parameter => parameter.label).join(', ');
-    // eslint-disable-next-line no-unused-vars
-    function evaluate(...args) {
-        return eval(`
-                (function(${__wwnames}) {
-                    return ${__wwformula.type === 'f' ? 'evaluateFormula' : 'evaluateCode'}(
+
+    try {
+        const args = parameters.map(parameter => parameter.value);
+        return new Function(
+            '__wwformula',
+            '__wwcontext',
+            'evaluateFormula',
+            'evaluateCode',
+            'args',
+            `return ${__wwformula.type === 'f' ? 'evaluateFormula' : 'evaluateCode'}(
                         __wwformula,
                         __wwcontext,
                         null,
                         { names: '${__wwnames}', value: args }
-                    );
-                })(...args)`);
-    }
-
-    try {
-        const args = parameters.map(parameter => parameter.value);
-        return evaluate(...args);
+                    );`
+        )(__wwformula, __wwcontext, evaluateFormula, evaluateCode, args);
     } catch (error) {
         if (error.message) {
             let errorMessage = error.message;

@@ -30,7 +30,7 @@ export default {
      * @PUBLIC_API
      */
     getCdnPrefix() {
-        return process.env.VUE_APP_CDN_URL;
+        return import.meta.env.VITE_APP_CDN_URL;
     },
 
     /**
@@ -259,7 +259,7 @@ export default {
     },
 
     getImgCdnUrl(url) {
-        if (url.includes(process.env.VUE_APP_CDN_URL)) {
+        if (url.includes(import.meta.env.VITE_APP_CDN_URL)) {
             return url;
         }
 
@@ -267,7 +267,7 @@ export default {
             return url;
         }
 
-        return process.env.VUE_APP_CDN_URL + url;
+        return import.meta.env.VITE_APP_CDN_URL + url;
     },
 
     getImgExtFromUrl(url) {

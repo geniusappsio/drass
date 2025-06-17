@@ -1,17 +1,22 @@
 import { defineStore } from 'pinia';
  
 export const useIconsStore = defineStore('icons', () => {
-    let values;
+    let values = {};
  
     return {
         async getIcon(name) {
              /* wwFront:start */
-            const url = `/public/icons/${name}.svg`;
-            const response = await fetch(url);
-            if (!response.ok) {
-                return null;
+            if (values[name]) {
+                return await values[name];
             }
-            return response.text();
+            const url = `/icons/${name}.svg`;
+            values[name] = fetch(url).then(response => {
+                if (!response.ok) {
+                    return null;
+                }
+                return response.text();
+            });
+            return await values[name];
             /* wwFront:end */
         },
      };

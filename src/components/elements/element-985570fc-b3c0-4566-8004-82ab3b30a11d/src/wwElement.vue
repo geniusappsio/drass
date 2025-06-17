@@ -282,7 +282,10 @@ export default {
         formatInputValue(value) {
             if (!value) return null;
             else if (this.content.selectionMode === "single") return value;
-            else if (this.content.selectionMode === "range") return [value.start, value.end].filter((value) => value);
+            else if (this.content.selectionMode === "range") {
+                if (!value.start && !value.end) return null;
+                return [value.start || null, value.end || null].filter((value) => value !== null && value !== "");
+            }
             else if (this.content.selectionMode === "multi") return value;
         },
         formatOutputValue(value) {
@@ -313,7 +316,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.calendar-only.stretch::v-deep .dp__outer_menu_wrap {
+:deep(.calendar-only.stretch) .dp__outer_menu_wrap {
     width: 100% !important;
 }
 .calendar-only.center {

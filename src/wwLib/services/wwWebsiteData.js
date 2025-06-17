@@ -88,7 +88,7 @@ async function fetchData(pageId) {
     try {
         const lang = window.location.pathname.startsWith(`/${wwLib.wwLang.lang}/`) ? wwLib.wwLang.lang : '';
         const base = wwLib.useBaseTag() ? wwLib.getBaseTag() : '/';
-        let url = `${base}public/data/${pageId.split('_')[0]}.json?wwlang=${lang}&_wwcv=${window.wwg_cacheVersion}`;
+        let url = `${base}data/${pageId.split('_')[0]}.json?wwlang=${lang}&_wwcv=${window.wwg_cacheVersion}`;
 
         const {
             data: {
@@ -111,7 +111,7 @@ async function fetchData(pageId) {
         }
 
         if (pageData.cmsDataSetPath) {
-            url = `${base}public/data/${pageId}.json?wwlang=${lang}&_wwcv=${window.wwg_cacheVersion}`;
+            url = `${base}data/${pageId}.json?wwlang=${lang}&_wwcv=${window.wwg_cacheVersion}`;
 
             const {
                 data: { page: pageIndexData },
@@ -128,7 +128,7 @@ async function fetchData(pageId) {
                 if (!wwLib.$store.getters['data/getCollections'][collection.id])
                     promises.push(
                         axios
-                            .get(`/public/collections/${collection.id}.json?_wwcv=${window.wwg_cacheVersion}`)
+                            .get(`/collections/${collection.id}.json?_wwcv=${window.wwg_cacheVersion}`)
                             .then(({ data }) => (collection.data = data))
                             .catch(err => wwLib.wwLog.error(err))
                     );

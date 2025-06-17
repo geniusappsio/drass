@@ -46,15 +46,15 @@ const PUSH_LAST_STYLE_HORIZONTAL = {
 };
 import { computed, inject, toRef, reactive, provide, onUnmounted, ref } from 'vue';
 
-import { useParentContentProperty } from '@/_common/use/useComponent';
-import { getDisplayValue } from '@/_common/helpers/component/component';
-import { inheritFrom } from '@/_common/helpers/configuration/configuration';
+import { useParentContentProperty } from '@/_common/use/useComponent.js';
+import { getDisplayValue } from '@/_common/helpers/component/component.js';
+import { inheritFrom } from '@/_common/helpers/configuration/configuration.js';
 
-import { getLayoutStyleFromContent } from '@/_front/helpers/wwLayoutStyle';
-import { useRestoreContext } from '@/_front/use/useRestoreContext';
+import { getLayoutStyleFromContent } from '@/_front/helpers/wwLayoutStyle.js';
+import { useRestoreContext } from '@/_front/use/useRestoreContext.js';
 
-import wwLayoutItem from './wwLayoutItem';
-import wwLayoutItemContext from './wwLayoutItemContext';
+import wwLayoutItem from './wwLayoutItem.vue';
+import wwLayoutItemContext from './wwLayoutItemContext.vue';
 
  
 let layoutId = 1;
@@ -78,7 +78,7 @@ export default {
         const id = layoutId++;
         const parentElementUid = inject('_wwElementUid', null);
         const parentElementComponentId = inject('_wwElementComponentId', null);
-        const sectionId = inject('sectionId');
+        const sectionId = inject('sectionId', null);
         const bindingContext = inject('bindingContext', null);
 
         const componentContent = inject('componentContent');

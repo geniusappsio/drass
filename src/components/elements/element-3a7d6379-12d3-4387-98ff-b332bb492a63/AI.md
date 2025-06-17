@@ -26,7 +26,7 @@ Component Purpose: Display an image with various customization options.
 - alt: string | { [lang]: string } - Alt text with multi-language support. Default: { en: "" }
 - loading: 'lazy' | 'eager' - Loading strategy. Default: "lazy"
 
-***Children:*** none
+***Slots:*** none
 
 ***Special Features:***
 - Responsive and state-based styles for objectFit, overlay, filter

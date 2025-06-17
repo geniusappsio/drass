@@ -6,9 +6,9 @@ import wwLinkPopup from './wwLinkPopup.vue';
 import wwElement from './wwElement.vue';
 import wwSection from './wwSection.vue';
 import wwBackgroundVideo from './wwBackgroundVideo.vue';
-import wwEditableText from './textEditor/wwEditableText';
-import wwText from './elements/wwText';
-import wwSimpleLayout from './elements/wwSimpleLayout';
+import wwEditableText from './textEditor/wwEditableText.vue';
+import wwText from './elements/wwText.vue';
+import wwSimpleLayout from './elements/wwSimpleLayout.vue';
 
 export default {
     install(app) {
