@@ -32,6 +32,15 @@ export default {
                 'displayPassword',
                 'rows',
                 'resize',
+                'currencyShowSymbol',
+                'currencySymbol',
+                'currencySymbolPosition',
+                'currencyDecimalPlaces',
+                'currencyThousandsSeparator',
+                'currencyDecimalSeparator',
+                'currencySymbolColor',
+                'currencySymbolFontSize',
+                'currencySymbolPadding',
             ],
         ],
         hint: (_, sidePanelContent) => {
@@ -70,6 +79,7 @@ export default {
             },
             bindable: true,
             responsive: true,
+            classes: true,
             states: true,
             hidden: content => content.advancedPlaceholder,
         },
@@ -98,6 +108,7 @@ export default {
                     { value: 'time', label: { en: 'Time', fr: 'Heure' } },
                     { value: 'tel', label: { en: 'Phone', fr: 'Téléphone' } },
                     { value: 'color', label: { en: 'Color', fr: 'Couleur' } },
+                    { value: 'currency', label: { en: 'Currency', fr: 'Devise' } },
                 ],
             },
             defaultValue: 'text',
@@ -289,6 +300,139 @@ export default {
             hidden: (content, sidePanelContent) => {
                 return !sidePanelContent.form?.uid || !content.customValidation;
             },
+        },
+        // Currency type
+        currencyShowSymbol: {
+            label: {
+                en: 'Show currency symbol',
+            },
+            type: 'OnOff',
+            bindable: true,
+            defaultValue: true,
+            hidden: content => content.type !== 'currency',
+        },
+        currencySymbol: {
+            label: {
+                en: 'Currency symbol',
+            },
+            type: 'Text',
+            bindable: true,
+            defaultValue: '$',
+            hidden: content => !content.currencyShowSymbol || content.type !== 'currency',
+        },
+        currencySymbolPosition: {
+            label: {
+                en: 'Symbol position',
+            },
+            type: 'TextRadioGroup',
+            bindable: true,
+            defaultValue: 'prefix',
+            options: {
+                choices: [
+                    { value: 'prefix', title: 'Before', icon: 'align-left' },
+                    { value: 'suffix', title: 'After', icon: 'align-right' },
+                ],
+            },
+            hidden: content => !content.currencyShowSymbol || content.type !== 'currency',
+        },
+        currencyDecimalPlaces: {
+            label: {
+                en: 'Decimal places',
+            },
+            type: 'Number',
+            bindable: true,
+            defaultValue: 2,
+            options: {
+                min: 0,
+                max: 10,
+                step: 1,
+            },
+            hidden: content => content.type !== 'currency',
+        },
+        currencyThousandsSeparator: {
+            label: {
+                en: 'Thousands separator',
+            },
+            type: 'TextSelect',
+            bindable: true,
+            defaultValue: ',',
+            options: {
+                options: [
+                    { value: ',', label: 'Comma (,)' },
+                    { value: '.', label: 'Dot (.)' },
+                    { value: ' ', label: 'Space ( )' },
+                    { value: "'", label: "Apostrophe (')" },
+                    { value: '', label: 'None' },
+                ],
+            },
+            hidden: content => content.type !== 'currency',
+        },
+        currencyDecimalSeparator: {
+            label: {
+                en: 'Decimal separator',
+            },
+            type: 'TextSelect',
+            bindable: true,
+            defaultValue: '.',
+            options: {
+                options: [
+                    { value: '.', label: 'Dot (.)' },
+                    { value: ',', label: 'Comma (,)' },
+                ],
+            },
+            hidden: content => content.type !== 'currency',
+        },
+        currencySymbolColor: {
+            label: {
+                en: 'Symbol color',
+            },
+            type: 'Color',
+            classes: true,
+            bindable: true,
+            responsive: true,
+            states: true,
+            defaultValue: '#666666',
+            hidden: content => content.type !== 'currency',
+        },
+        currencySymbolFontSize: {
+            label: {
+                en: 'Symbol font size',
+            },
+            type: 'Length',
+            options: {
+                unitChoices: [
+                    { value: 'px', label: 'px', min: 0, max: 100 },
+                    { value: 'em', label: 'em', min: 0, max: 10 },
+                    { value: '%', label: '%', min: 0, max: 100 },
+                ],
+            },
+            classes: true,
+            bindable: true,
+            responsive: true,
+            states: true,
+            defaultValue: '1em',
+            responsive: true,
+            hidden: content => content.type !== 'currency',
+        },
+        currencySymbolPadding: {
+            label: {
+                en: 'Symbol padding',
+            },
+            type: 'Length',
+            options: {
+                unitChoices: [
+                    { value: 'px', label: 'px', min: 0, max: 100 },
+                    { value: 'em', label: 'em', min: 0, max: 10 },
+                    { value: '%', label: '%', min: 0, max: 100 },
+                ],
+            },
+            classes: true,
+            bindable: true,
+            responsive: true,
+            states: true,
+            defaultValue: '4px',
+            responsive: true,
+            hidden: content => content.type !== 'currency',
         },
     },
 };
